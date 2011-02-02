@@ -1,0 +1,40 @@
+<!DOCTYPE plugin SYSTEM "../../libs/devblocks/plugin.dtd">
+<plugin>
+	<id>cerb5blog.required_watcher</id>
+	<name>[Cerb5blog] Required Watchers</name>
+	<description>Send Email Notifications / Watchers to ticket owners on update and assigement.  Users can not change or turn off said notifications.</description>
+	<author>Robert Middleswarth</author>
+	<revision>0</revision>
+	<link>http://cerb5blog.com</link>
+	<image>plugin.png</image>
+ 
+	<!-- Plugin Dependencies -->
+	
+	<dependencies>
+		<require plugin_id="cerberusweb.core" version="5.0.0-rc1" />
+	</dependencies>
+	
+	<extensions>
+		<!-- Event Listeners -->
+		
+		<extension point="devblocks.listener.event">
+			<id>cerb5blog.required_watcher.listeners</id>
+			<name>Cerb5blog Required Watchers Listener</name>
+			<class>
+				<file>api/App.php</file>
+				<name>Cerb5blogRequiredWatchersEventListener</name>
+			</class>
+			<params>
+				<!-- E-mail Event Listener -->
+				<param key="events">
+					<value>
+						<data key="context_link.assigned" />
+						<data key="ticket.reply.inbound" />
+						<data key="ticket.reply.outbound" />						
+					</value>
+				</param>
+			</params>
+		</extension>
+	
+	</extensions>
+</plugin>
