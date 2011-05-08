@@ -14,6 +14,18 @@
 		<require plugin_id="cerberusweb.core" version="5.0.0-rc1" />
 	</dependencies>
 	
+	<!-- Event Points -->
+
+	<event_points>
+		<event id="context_link.set">
+			<name>Context Link Set</name>
+			<param key="from_context_id" />
+			<param key="to_context" />
+			<param key="to_context_id" />
+		</event>
+	</event_points>
+
+	
 	<extensions>
 		<!-- Event Listeners -->
 		
@@ -28,7 +40,8 @@
 				<!-- E-mail Event Listener -->
 				<param key="events">
 					<value>
-						<data key="context_link.assigned" />
+						<data key="context_link.set" />
+						<data key="cerb5blog.context_link.watcher" />
 						<data key="ticket.reply.inbound" />
 						<data key="ticket.reply.outbound" />						
 					</value>

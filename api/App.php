@@ -9,7 +9,10 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 	 */
 	function handleEvent(Model_DevblocksEvent $event) {
 		switch($event->id) {
-			case 'context_link.assigned':
+			case 'context_link.set':
+				$this->_handleContextLink($event);
+				break;
+			case 'cerb5blog.context_link.watcher':
 				$this->_workerAssigned($event);
 				break;
 			case 'ticket.reply.inbound':
@@ -33,6 +36,25 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 				break;
     	}	
     }
+
+	private function _handleContextLink($event) {
+		$events = DevblocksPlatform::getEventService();
+		
+		// Assignment
+		if(CerberusContexts::CONTEXT_WORKER == $event->params['to_context']) {
+			// Trigger a context->worker assignment notification
+			$events->trigger(
+		        new Model_DevblocksEvent(
+		            'cerb5blog.context_link.watcher',
+	                array(
+	                    'worker_id' => $event->params['to_context_id'],
+	                    'context' => $event->params['from_context'],
+	                    'context_id' => $event->params['from_context_id'],
+	                )
+	            )
+			);
+		}
+	}
     
 	private function _workerAssignedTicket($event) {
 		$translate = DevblocksPlatform::getTranslationService();
