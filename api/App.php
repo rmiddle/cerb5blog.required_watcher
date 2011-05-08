@@ -67,9 +67,9 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         $mail_service = DevblocksPlatform::getMailService();
         $mailer = null; // lazy load
         
-        $settings = DevblocksPlatform::getPluginSettingsService();
-        $default_from = $settings->get('cerberusweb.core',CerberusSettings::DEFAULT_REPLY_FROM, CerberusSettingsDefaults::DEFAULT_REPLY_FROM);
-        $default_personal = $settings->get('cerberusweb.core',CerberusSettings::DEFAULT_REPLY_PERSONAL, CerberusSettingsDefaults::DEFAULT_REPLY_PERSONAL);
+	$addresse = DAO_AddressOutgoing::getDefault();
+        $default_from = $addresse->email;
+        $default_personal = $addresse->reply_personal;
 
         $ticket = DAO_Ticket::get($ticket_id);
         
