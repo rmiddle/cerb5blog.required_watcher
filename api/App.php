@@ -92,7 +92,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 				$ticket->subject
 		);
 		$url_writer = DevblocksPlatform::getUrlService();
-        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask);
+        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask));
 
         $body .= "\r\n" . $url;
         $body .= "\r\n" . $message->getContent();
