@@ -86,13 +86,21 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 				$ticket->mask,
 				$ticket->subject
         );
-
-        $content = $message->getContent();
+        
+        $body = sprintf("[Ticket Assignment #%d]: %s",
+				$task->id,
+				$task->title
+		);
+        $mft = DevblocksPlatform::getExtension($context, false, true);
+        $ext = $mft->createInstance();	
+		$url = $ext->getPermalink($task_id);
+        $body .= "\r\n" . $url;
+        $body .= "\r\n" . $message->getContent();
 
 		CerberusMail::quickSend(
 			$to,
 			$subject,
-			$content
+			$body
 		);				
 	}
     
