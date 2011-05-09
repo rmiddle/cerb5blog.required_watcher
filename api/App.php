@@ -90,11 +90,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
             return;
         }
 		$message_headers = $message->getHeaders();
+print_r($message_headers);			
         if (is_array($message_headers) === false) {
             return;
         }
 		unset($messages);
-print_r($message_headers);			
 		$reply_to = $default_from;
 		$reply_personal = $default_personal;
 				
