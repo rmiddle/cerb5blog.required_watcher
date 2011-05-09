@@ -91,9 +91,9 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 				$ticket->mask,
 				$ticket->subject
 		);
-        $mft = DevblocksPlatform::getExtension($context, false, true);
-        $ext = $mft->createInstance();	
-		$url = $ext->getPermalink($ticket_id);
+		$url_writer = DevblocksPlatform::getUrlService();
+        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask);
+
         $body .= "\r\n" . $url;
         $body .= "\r\n" . $message->getContent();
 
