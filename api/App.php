@@ -63,8 +63,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$worker_id = $event->params['worker_id'];
 		$context = $event->params['context'];
 		$ticket_id = $event->params['context_id'];
-echo "worker_id = " . $worker_id;		
-echo "ticket_id = " . $ticket_id;		
 
         $mail_service = DevblocksPlatform::getMailService();
         $mailer = null; // lazy load
@@ -83,11 +81,13 @@ echo "ticket_id = " . $ticket_id;
 			return;
 			
         $messages = DAO_Message::getMessagesByTicket($ticket_id);
+print_r($messages);
         if (is_array($messages) === false) {
             return;
         }
 
 		$message = end($messages); // last message
+print_r($message);
         if (is_array($message) === false) {
             return;
         }
