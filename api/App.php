@@ -102,68 +102,40 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$context = $event->params['context'];
 		$task_id = $event->params['context_id'];
 		
-        $mail_service = DevblocksPlatform::getMailService();
-        $mailer = null; // lazy load
-        
-        $settings = DevblocksPlatform::getPluginSettingsService();
-        $reply_to = $settings->get('cerberusweb.core',CerberusSettings::DEFAULT_REPLY_FROM, CerberusSettingsDefaults::DEFAULT_REPLY_FROM);
-        $reply_personal = $settings->get('cerberusweb.core',CerberusSettings::DEFAULT_REPLY_PERSONAL, CerberusSettingsDefaults::DEFAULT_REPLY_PERSONAL);
-
         $task = DAO_Task::get($task_id);
         
 		// Sanitize and combine all the destination addresses
 		$next_worker = DAO_Worker::get($worker_id);
-        $notify_emails = $next_worker->email;
+        $to = $next_worker->email;
 			
-		if(empty($notify_emails))
+		if(empty($to))
 			return;
 			
-		try {
-			if(null == $mailer)
-				$mailer = $mail_service->getMailer(CerberusMail::getMailerDefaults());
-					
-
-
-		 	// Create the message
-			$mail = $mail_service->createMessage();
-			$mail->setTo(array($notify_emails));
-			$mail->setFrom(array($reply_to => $reply_personal));
-			$mail->setReplyTo($reply_to);
-			$mail->setSubject(sprintf("[Task Assignment #%d]: %s",
-				$task->id,
-				$task->title
-			));
+		$subject = sprintf("[Task Assignment #%d]: %s",
+            $task->id,
+			$task->title
+        );
 				
-			$headers = $mail->getHeaders();
+        $body = sprintf("[Task Assignment #%d]: %s",
+			$task->id,
+			$task->title
+		);
             
-			$headers->addTextHeader('X-Mailer','Cerberus Helpdesk (Build '.APP_BUILD.')');
-			$headers->addTextHeader('Precedence','List');
-			$headers->addTextHeader('Auto-Submitted','auto-generated');
-				
-            $body = sprintf("[Task Assignment #%d]: %s",
-				$task->id,
-				$task->title
-			);
-            $mft = DevblocksPlatform::getExtension($context, false, true);
-            $ext = $mft->createInstance();	
-			$url = $ext->getPermalink($task_id);
-            $body .= "\r\n" . $url;
-            // Comments
-            $comments = DAO_Comment::getByContext(CerberusContexts::CONTEXT_TASK, $task_id);
-            foreach($comments as $comment_id => $comment) {
-                $address = DAO_Address::get($comment->address_id);
-                $body .= "\r\nCommented By: " . $address->first_name . " " . $address->last_name;
-                $body .= "\r\n" . $comment->comment;
-            }
-            unset($comments);
-            $body .= "\r\n";
-            $mail->setBody($body);
-				
-			$result = $mailer->send($mail);
-					
-		} catch(Exception $e) {
-            echo "Task Email Notification failed to send<br>";
-		}
+ 		$url_writer = DevblocksPlatform::getUrlService();
+        $url = $url_writer->write(sprintf("c=tasks&tab=display&id=%d", $task_id, true),
+
+        $body = "\r\n## " . $url;
+        $body .= "\r\nTitle: " . $task->title;
+        $body .= "\r\nLast Update:  " . $task->updated_date;
+        $body .= "\r\nDue Date: " . $task->due_date;
+        $body .= "\r\nIs Completed: " . $task->is_completed ? "Open" : "Closed";
+        $body .= "\r\nCompleted Date: " . $task->completed_date;
+
+		CerberusMail::quickSend(
+			$to,
+			$subject,
+			$body
+		);				
 	}
 };
 
