@@ -84,7 +84,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$url_writer = DevblocksPlatform::getUrlService();
         $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
 
-        $body = "##Url: " . $url;
+        $body = "## " . $url;
         $body .= "\r\n" . $message->getContent();
 
 		CerberusMail::quickSend(
