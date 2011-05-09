@@ -47,12 +47,12 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$context = $event->params['context'];
  		
         switch($context) {
-		case CerberusContexts::CONTEXT_TICKET:
-			$this->_workerAssignedTicket($event);
-			break;
-		case CerberusContexts::CONTEXT_TASK:
-			$this->_workerAssignedTask($event);
-			break;
+            case CerberusContexts::CONTEXT_TICKET:
+                $this->_workerAssignedTicket($event);
+                break;
+            case CerberusContexts::CONTEXT_TASK:
+                $this->_workerAssignedTask($event);
+                break;
     	}	
     }
 
@@ -63,13 +63,15 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$worker_id = $event->params['worker_id'];
 		$context = $event->params['context'];
 		$ticket_id = $event->params['context_id'];
-		
+echo "worker_id = " . $worker_id;		
+echo "ticket_id = " . $ticket_id;		
+
         $mail_service = DevblocksPlatform::getMailService();
         $mailer = null; // lazy load
         
-	$addresse = DAO_AddressOutgoing::getDefault();
-        $default_from = $addresse->email;
-        $default_personal = $addresse->reply_personal;
+        $address = DAO_AddressOutgoing::getDefault();
+        $default_from = $address->email;
+        $default_personal = $address->reply_personal;
 
         $ticket = DAO_Ticket::get($ticket_id);
         
@@ -81,13 +83,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			return;
 			
         $messages = DAO_Message::getMessagesByTicket($ticket_id);
-        print_r($messages);
         if (is_array($messages) === false) {
             return;
         }
 
 		$message = end($messages); // last message
-        print_r($message);
         if (is_array($message) === false) {
             return;
         }
