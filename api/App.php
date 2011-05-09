@@ -122,7 +122,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		);
             
  		$url_writer = DevblocksPlatform::getUrlService();
-        $url = $url_writer->write(sprintf("c=tasks&tab=display&id=%d", $task_id, true));
+        $url = $url_writer->write(sprintf("c=tasks&tab=display&id=%d", $task_id), true);
 
         $body = "\r\n## " . $url;
         $body .= "\r\nTitle: " . $task->title;
