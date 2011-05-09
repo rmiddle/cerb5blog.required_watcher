@@ -42,8 +42,8 @@
 					<value>
 						<data key="context_link.set" />
 						<data key="cerb5blog.context_link.watcher" />
-						<data key="ticket.reply.inbound" />
-						<data key="ticket.reply.outbound" />						
+						<data key="ticket.message.inbound" />
+						<data key="ticket.message.outbound" />						
 					</value>
 				</param>
 			</params>
