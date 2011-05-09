@@ -88,12 +88,12 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         );
         
         $body = sprintf("[Ticket Assignment #%d]: %s",
-				$task->id,
-				$task->title
+				$ticket->mask,
+				$ticket->subject
 		);
         $mft = DevblocksPlatform::getExtension($context, false, true);
         $ext = $mft->createInstance();	
-		$url = $ext->getPermalink($task_id);
+		$url = $ext->getPermalink($ticket_id);
         $body .= "\r\n" . $url;
         $body .= "\r\n" . $message->getContent();
 
