@@ -64,94 +64,33 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$context = $event->params['context'];
 		$ticket_id = $event->params['context_id'];
 
-        $mail_service = DevblocksPlatform::getMailService();
-        $mailer = null; // lazy load
+        $ticket = DAO_Ticket::get($ticket_id);
         
         $address = DAO_AddressOutgoing::getDefault();
         $default_from = $address->email;
         $default_personal = $address->reply_personal;
 
-        $ticket = DAO_Ticket::get($ticket_id);
+        // Sanitize and combine all the destination addresses
+        $next_worker = DAO_Worker::get($worker_id);
+        $to = $next_worker->email;
+
+        if(empty($to))
+            return;
         
-		// Sanitize and combine all the destination addresses
-		$next_worker = DAO_Worker::get($worker_id);
-        $notify_emails = $next_worker->email;
-			
-		if(empty($notify_emails))
-			return;
-			
-        $messages = DAO_Message::getMessagesByTicket($ticket_id);
-        if (is_array($messages) === false) {
-            return;
-        }
-
-		$message = end($messages); // last message
-echo "message = ";
-print_r($message);
-        if (is_array($message) === false) {
-            return;
-        }
-		$message_headers = $message->getHeaders();
-echo "message_headers = ";
-print_r($message_headers);
-        if (is_array($message_headers) === false) {
-            return;
-        }
-		unset($messages);
-		$reply_to = $default_from;
-		$reply_personal = $default_personal;
-				
-		// See if we need a group-specific reply-to
-//		if(!empty($ticket->team_id)) {
-//			@$group_from = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_FROM);
-//			if(!empty($group_from))
-//				$reply_to = $group_from;
-					
-//			@$group_personal = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_PERSONAL);
-//			if(!empty($group_personal))
-//				$reply_personal = $group_personal;
-//		}
-			
-		try {
-			if(null == $mailer)
-				$mailer = $mail_service->getMailer(CerberusMail::getMailerDefaults());
-					
-		 	// Create the message
-
-			$mail = $mail_service->createMessage();
-			$mail->setTo(array($notify_emails));
-			$mail->setFrom(array($reply_to => $reply_personal));
-			$mail->setReplyTo($reply_to);
-			$mail->setSubject(sprintf("[Ticket Assignment #%s]: %s",
+		$subject = sprintf("[Ticket Assignment #%s]: %s\r\n",
 				$ticket->mask,
 				$ticket->subject
 			));
-				
-			$hdrs = $mail->getHeaders();
-				
-			$hdrs->removeAll('references');
-            $hdrs->removeAll('in-reply-to');
-            if(isset($message_headers['in-reply-to'])) {
-                @$in_reply_to = $message_headers['in-reply-to'];
-			    $hdrs->addTextHeader('References', $in_reply_to);
-			    $hdrs->addTextHeader('In-Reply-To', $in_reply_to);
-			} else {
-                @$msgid = $message_headers['message-id'];
-			    $hdrs->addTextHeader('References', $msgid);
-			    $hdrs->addTextHeader('In-Reply-To', $msgid);
-            }
-				
-			$hdrs->addTextHeader('X-Mailer','Cerberus Helpdesk (Build '.APP_BUILD.')');
-			$hdrs->addTextHeader('Precedence','List');
-			$hdrs->addTextHeader('Auto-Submitted','auto-generated');
-				
-			$mail->setBody($message->getContent());					
-				
-			$result = $mailer->send($mail);
+		$tpl_builder = DevblocksPlatform::getTemplateBuilder();
 					
-		} catch(Exception $e) {
-            echo "Ticket Email Notification failed to send<br>";
-		}
+		$content = 
+
+				CerberusMail::quickSend(
+					$to,
+					$subject,
+					$content
+				);
+				
 	}
     
 	private function _workerAssignedTask($event) {
