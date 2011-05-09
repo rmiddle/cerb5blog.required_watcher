@@ -81,19 +81,20 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			return;
 			
         $messages = DAO_Message::getMessagesByTicket($ticket_id);
-print_r($messages);
         if (is_array($messages) === false) {
             return;
         }
 
 		$message = end($messages); // last message
-print_r($message);
         if (is_array($message) === false) {
             return;
         }
 		$message_headers = $message->getHeaders();
+        if (is_array($message_headers) === false) {
+            return;
+        }
 		unset($messages);
-			
+print_r($message_headers);			
 		$reply_to = $default_from;
 		$reply_personal = $default_personal;
 				
