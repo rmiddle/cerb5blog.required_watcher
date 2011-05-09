@@ -85,7 +85,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$subject = sprintf("[Ticket Assignment #%s]: %s\r\n",
 				$ticket->mask,
 				$ticket->subject
-			));
+        );
 
         $content = $message->getContent();
 
