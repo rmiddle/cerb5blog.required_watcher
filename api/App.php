@@ -86,6 +86,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         }
 
 		$message = end($messages); // last message
+echo "message = ";
+print_r($message);
         if (is_array($message) === false) {
             return;
         }
