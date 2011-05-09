@@ -77,20 +77,23 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         if(empty($to))
             return;
         
+        $ticket = DAO_Ticket::get($ticket_id);
+        $messages = DAO_Message::getMessagesByTicket($ticket_id);			
+		$message = end($messages); // last message
+		unset($messages);
+
 		$subject = sprintf("[Ticket Assignment #%s]: %s\r\n",
 				$ticket->mask,
 				$ticket->subject
 			));
-		$tpl_builder = DevblocksPlatform::getTemplateBuilder();
-					
-		$content = 
 
-				CerberusMail::quickSend(
-					$to,
-					$subject,
-					$content
-				);
-				
+        $content = $message->getContent();
+
+		CerberusMail::quickSend(
+			$to,
+			$subject,
+			$content
+		);				
 	}
     
 	private function _workerAssignedTask($event) {
