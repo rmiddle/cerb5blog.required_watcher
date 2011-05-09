@@ -24,19 +24,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		}
 	}
 
-	private function _workerAssigned($event) {
-		$context = $event->params['context'];
- 		
-        switch($context) {
-			case CerberusContexts::CONTEXT_TICKET:
-				$this->_workerAssignedTicket($event);
-				break;
-            case CerberusContexts::CONTEXT_TASK:
-				$this->_workerAssignedTask($event);
-				break;
-    	}	
-    }
-
 	private function _handleContextLink($event) {
 		$events = DevblocksPlatform::getEventService();
 		
@@ -56,6 +43,19 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		}
 	}
     
+	private function _workerAssigned($event) {
+		$context = $event->params['context'];
+ 		
+        switch($context) {
+		case CerberusContexts::CONTEXT_TICKET:
+			$this->_workerAssignedTicket($event);
+			break;
+		case CerberusContexts::CONTEXT_TASK:
+			$this->_workerAssignedTask($event);
+			break;
+    	}	
+    }
+
 	private function _workerAssignedTicket($event) {
 		$translate = DevblocksPlatform::getTranslationService();
 		$events = DevblocksPlatform::getEventService();
@@ -80,8 +80,15 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		if(empty($notify_emails))
 			return;
 			
-        $messages = DAO_Message::getMessagesByTicket($ticket_id);			
+        $messages = DAO_Message::getMessagesByTicket($ticket_id);
+        if (is_array($messages) === false) {
+            return;
+        }
+
 		$message = end($messages); // last message
+        if (is_array($message) === false) {
+            return;
+        }
 		$message_headers = $message->getHeaders();
 		unset($messages);
 			
@@ -89,15 +96,15 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$reply_personal = $default_personal;
 				
 		// See if we need a group-specific reply-to
-		if(!empty($ticket->team_id)) {
-			@$group_from = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_FROM);
-			if(!empty($group_from))
-				$reply_to = $group_from;
+//		if(!empty($ticket->team_id)) {
+//			@$group_from = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_FROM);
+//			if(!empty($group_from))
+//				$reply_to = $group_from;
 					
-			@$group_personal = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_PERSONAL);
-			if(!empty($group_personal))
-				$reply_personal = $group_personal;
-		}
+//			@$group_personal = DAO_GroupSettings::get($ticket->team_id, DAO_GroupSettings::SETTING_REPLY_PERSONAL);
+//			if(!empty($group_personal))
+//				$reply_personal = $group_personal;
+//		}
 			
 		try {
 			if(null == $mailer)

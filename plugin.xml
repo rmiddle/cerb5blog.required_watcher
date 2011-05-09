@@ -18,7 +18,7 @@
 
 	<event_points>
 		<event id="cerb5blog.context_link.watcher">
-			<name>Context Link Set</name>
+			<name>Context Link Set Worker</name>
 			<param key="worker_id" />
 			<param key="context" />
 			<param key="context_id" />
