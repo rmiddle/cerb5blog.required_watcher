@@ -15,7 +15,7 @@ Installation using Git
 * `git checkout --track -b 5.4 origin/5.4`
 * In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
 
-Installation using a zip or tar.gz
+Installation using zip / tar.gz
 ------------
 * Goto `https://github.com/cerb5-plugins/cerb5blog.required_watcher`
 * Select the correct branch that matches your version of Cerberus
