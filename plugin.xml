@@ -1,5 +1,5 @@
-<!DOCTYPE plugin SYSTEM "../../libs/devblocks/plugin.dtd">
-<plugin>
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.devblocks.com/schema/plugin.xsd">
 	<id>cerb5blog.required_watcher</id>
 	<name>[Cerb5blog] Required Watchers</name>
 	<description>Send Email Notifications / Watchers to ticket owners on update and assigement.  Users can not change or turn off said notifications.</description>

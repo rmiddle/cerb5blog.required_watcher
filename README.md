@@ -11,7 +11,15 @@ Installation
 ------------
 * Change directory to **/cerb5/storage/plugins/**
 * `git clone git://github.com/rmiddle/cerb5blog.required_watcher.git`
+* `cd cerb5blog.required_watcher`
 * `git checkout --track -b 5.4 origin/5.4`
+* In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
+
+Or
+* Goto `https://github.com/cerb5-plugins/cerb5blog.required_watcher`
+* Select the correct branch that matches your version of Cerberus
+* click Download button.
+* Unzip in to **/cerb5/storage/plugins/cerb5blog.required_watcher**
 * In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
 
 Note: Make sure you branch number matches your Cerberus Version Number.
