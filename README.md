@@ -7,7 +7,7 @@ What's this?
 ------------
 Required Watcher is quick project I created to force all workers to get assignment emails. It is very basic plug-in with a very specif use. — Read more 
 
-Installation
+Installation using Git
 ------------
 * Change directory to **/cerb5/storage/plugins/**
 * `git clone git://github.com/rmiddle/cerb5blog.required_watcher.git`
@@ -15,7 +15,8 @@ Installation
 * `git checkout --track -b 5.4 origin/5.4`
 * In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
 
-Or
+Installation using a zip or tar.gz
+------------
 * Goto `https://github.com/cerb5-plugins/cerb5blog.required_watcher`
 * Select the correct branch that matches your version of Cerberus
 * click Download button.
