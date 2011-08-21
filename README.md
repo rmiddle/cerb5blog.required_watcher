@@ -1,3 +1,6 @@
+`Warning not yet ready for use`
+===========================================
+
 Cerb5 Plugins - cerb5blog.required_watcher
 ===========================================
 Copyright (C) 2011 Robert Middleswarth
@@ -5,14 +8,16 @@ Copyright (C) 2011 Robert Middleswarth
 
 What's this?
 ------------
-Required Watcher is quick project I created to force all workers to get assignment emails. It is very basic plug-in with a very specif use. — Read more 
+Required Watcher is quick project I created to force all workers to get assignment emails. It is very basic plug-in with a very specif use.
+
+* Not yet Tested
 
 Installation using Git
 ------------
 * Change directory to **/cerb5/storage/plugins/**
 * `git clone git://github.com/rmiddle/cerb5blog.required_watcher.git`
 * `cd cerb5blog.required_watcher`
-* `git checkout --track -b 5.4 origin/5.4`
+* `git checkout --track -b 5.5 origin/5.5`
 * In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
 
 Installation using zip / tar.gz
