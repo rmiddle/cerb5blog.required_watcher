@@ -1,6 +1,3 @@
-`Warning not yet ready for use`
-===========================================
-
 Cerb5 Plugins - cerb5blog.required_watcher
 ===========================================
 Copyright (C) 2011 Robert Middleswarth
@@ -17,7 +14,7 @@ Installation using Git
 * Change directory to **/cerb5/storage/plugins/**
 * `git clone git://github.com/rmiddle/cerb5blog.required_watcher.git`
 * `cd cerb5blog.required_watcher`
-* `git checkout --track -b 5.5 origin/5.5`
+* `git checkout --track -b 5.6 origin/5.6`
 * In your helpdesk, enable the plugin from **Setup->Features & Plugins**.
 
 Installation using zip / tar.gz
