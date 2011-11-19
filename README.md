@@ -1,6 +1,3 @@
-`Warning not yet ready for use`
-===========================================
-
 Cerb5 Plugins - cerb5blog.required_watcher
 ===========================================
 Copyright (C) 2011 Robert Middleswarth
@@ -10,7 +7,7 @@ What's this?
 ------------
 Required Watcher is quick project I created to force all workers to get assignment emails. It is very basic plug-in with a very specif use.
 
-* Not yet Tested
+* 5.5.0
 
 Installation using Git
 ------------
