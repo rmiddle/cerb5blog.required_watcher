@@ -11,11 +11,7 @@
 	<!-- Requirements -->
 	
 	<requires>
-<<<<<<< HEAD
-		<app_version min="5.6" max="5.7" />
-=======
 		<app_version min="5.6" max="5.7.99" />
->>>>>>> 5.6
 	</requires>
 	
 	<!-- Plugin Dependencies -->
