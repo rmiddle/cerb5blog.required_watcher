@@ -145,9 +145,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                 @$model = $object['model'];
                 @$changes = $object['changes'];
                     
-                echo "changes = ";
-                print_r($changes);
-                
                 if(empty($model) || empty($changes))
                     continue;
 
@@ -162,8 +159,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         @$ticket_id = $model[DAO_Ticket::ID];
 
                         $ticket = DAO_Ticket::get($ticket_id);
-                        echo "Ticket = ";
-                        print_r($ticket);
         
                         $address = DAO_AddressOutgoing::getDefault();
                         $default_from = $address->email;
@@ -175,16 +170,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             
                         if(empty($to))
                             return;
-                            
-                        echo "to = " . $to . "\n";
         
                         $messages = DAO_Message::getMessagesByTicket($ticket_id);			
                         $message = end($messages); // last message
                         unset($messages);
 
-                        echo "Message = ";
-                        print_r($message);
-                        
                         $subject = sprintf("[Ticket Owner #%s]: %s\r\n",
                             $ticket->mask,
                             $ticket->subject
