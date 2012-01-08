@@ -163,7 +163,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         print_r($token_labels);
                         echo "token_values = ";
                         print_r($token_values);
-                        $ticket = DAO_Ticket::get($ticket_id);
+                        
                         
                         $address = DAO_AddressOutgoing::getDefault();
                         $default_from = $address->email;
@@ -176,6 +176,26 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         if(empty($to))
                             return;
         
+                        $token = array(
+							'action' => relay_email,
+							'to' => array( '0' => $to ),
+							'subject' => "{{ticket_subject}}",
+							'content' => 
+"## Relayed from {{ticket_url}}
+## Your reply to this message will be broadcast to the requesters. 
+## Instructions: http://wiki.cerb5.com/wiki/Email_Relay
+##
+{{content}}
+",
+							'include_attachments' => 1,
+						);
+                        echo "token = ";
+                        print_r($token);
+
+                        Event_MailReceivedByWatcher::runActionExtension($token, array(), $token_labels,$token_values);
+                        /*
+                        $ticket = DAO_Ticket::get($ticket_id);
+
                         $messages = DAO_Message::getMessagesByTicket($ticket_id);			
                         $message = end($messages); // last message
                         unset($messages);
@@ -195,7 +215,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             $to,
                             $subject,
                             $body
-                        );				
+                        );
+                        */
                     }
                 }
             }
