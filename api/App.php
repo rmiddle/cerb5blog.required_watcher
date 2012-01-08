@@ -140,68 +140,69 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$events = DevblocksPlatform::getEventService();
 
         $objects = $event->params['objects'];
-           	if(is_array($objects))
-                foreach($objects as $object_id => $object) {
-                    @$model = $object['model'];
-                    @$changes = $object['changes'];
+        if(is_array($objects)) {
+            foreach($objects as $object_id => $object) {
+                @$model = $object['model'];
+                @$changes = $object['changes'];
                     
-                    echo "changes = ";
-                    print_r($changes);
+                echo "changes = ";
+                print_r($changes);
 
-                    if(empty($model) || empty($changes))
-                        continue;
+                if(empty($model) || empty($changes))
+                    continue;
 
-                    /*
-                     * Owner changed
-                     */
-                    if(isset($changes[DAO_Ticket::OWNER_ID])) {
-                        @$owner = $changes[DAO_Ticket::OWNER_ID];
-                        echo "Owner = ";
-                        print_r($owner);
+                /*
+                 * Owner changed
+                 */
+                if(isset($changes[DAO_Ticket::OWNER_ID])) {
+                    @$owner = $changes[DAO_Ticket::OWNER_ID];
+                    echo "Owner = ";
+                    print_r($owner);
                         
-                        if((!empty($owner['to']) && ($owner['to'] !== 0)) {
-           					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
-           					@$target_worker = DAO_Worker::get($owner_id);
-                            @$ticket_id = $model[DAO_Ticket::ID];
-                            echo "Ticket_id = ";
-                            print_r($ticket_id);
+                    if((!empty($owner['to']) && ($owner['to'] !== 0)) {
+      					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
+       					@$target_worker = DAO_Worker::get($owner_id);
+                        @$ticket_id = $model[DAO_Ticket::ID];
+                        echo "Ticket_id = ";
+                        print_r($ticket_id);
 
-                            $ticket = DAO_Ticket::get($ticket_id);
+                        $ticket = DAO_Ticket::get($ticket_id);
         
-                            $address = DAO_AddressOutgoing::getDefault();
-                            $default_from = $address->email;
-                            $default_personal = $address->reply_personal;
+                       $address = DAO_AddressOutgoing::getDefault();
+                       $default_from = $address->email;
+                        $default_personal = $address->reply_personal;
 
-                            // Sanitize and combine all the destination addresses
-                            $next_worker = DAO_Worker::get($worker_id);
-                            $to = $next_worker->email;
+                        // Sanitize and combine all the destination addresses
+                        $next_worker = DAO_Worker::get($worker_id);
+                        $to = $next_worker->email;
                             
-                            if(empty($to))
-                                return;
+                        if(empty($to))
+                            return;
         
-                            $messages = DAO_Message::getMessagesByTicket($ticket_id);			
-                            $message = end($messages); // last message
-                            unset($messages);
+                        $messages = DAO_Message::getMessagesByTicket($ticket_id);			
+                        $message = end($messages); // last message
+                        unset($messages);
 
-                            $subject = sprintf("[Ticket Owner #%s]: %s\r\n",
-                                $ticket->mask,
-                                $ticket->subject
-                            );
+                        $subject = sprintf("[Ticket Owner #%s]: %s\r\n",
+                            $ticket->mask,
+                            $ticket->subject
+                        );
         
-                            $url_writer = DevblocksPlatform::getUrlService();
-                            $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
+                        $url_writer = DevblocksPlatform::getUrlService();
+                        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
 
-                            $body = "## " . $url;
-                            $body .= "\r\n" . $message->getContent();
+                        $body = "## " . $url;
+                        $body .= "\r\n" . $message->getContent();
 
-                            CerberusMail::quickSend(
-                                $to,
-                                $subject,
-                                $body
-                            );				
-                        }
+                        CerberusMail::quickSend(
+                            $to,
+                            $subject,
+                            $body
+                        );				
                     }
                 }
+            }
+        }
 	}
 };
 
