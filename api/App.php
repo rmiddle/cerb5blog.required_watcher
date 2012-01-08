@@ -156,17 +156,15 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                  */
                 if(isset($changes[DAO_Ticket::OWNER_ID])) {
                     @$owner = $changes[DAO_Ticket::OWNER_ID];
-                    echo "Owner = ";
-                    print_r($owner);
                         
                     if ( (!empty($owner['to'])) && ($owner['to'] !== 0) ) {
       					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
        					@$target_worker = DAO_Worker::get($owner_id);
                         @$ticket_id = $model[DAO_Ticket::ID];
-                        echo "Ticket_id = ";
-                        print_r($ticket_id);
 
                         $ticket = DAO_Ticket::get($ticket_id);
+                        echo "Ticket = ";
+                        print_r($ticket);
         
                        $address = DAO_AddressOutgoing::getDefault();
                        $default_from = $address->email;
