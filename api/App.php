@@ -144,6 +144,9 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                 foreach($objects as $object_id => $object) {
                     @$model = $object['model'];
                     @$changes = $object['changes'];
+                    
+                    echo "changes = ";
+                    print_r($changes);
 
                     if(empty($model) || empty($changes))
                         continue;
@@ -153,13 +156,13 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                      */
                     if(isset($changes[DAO_Ticket::OWNER_ID])) {
                         @$owner = $changes[DAO_Ticket::OWNER_ID];
+                        echo "Owner_id = " . 
+                        print_r($owner_id);
                         
                         if(!empty($owner_id['to'])) {
            					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
            					@$target_worker = DAO_Worker::get($owner_id);
                             @$ticket_id = $model[DAO_Ticket::ID];
-                            echo "Owner_id = " . 
-                            print_r($owner_id);
                             echo "Ticket_id = ";
                             print_r($ticket_id);
 
