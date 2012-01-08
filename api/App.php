@@ -100,28 +100,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
             $values['initial_message_sender_full_name'],
             $values['subject']
         );
-        /*
-        $messages = DAO_Message::getMessagesByTicket($ticket_id);			
-		$message = end($messages); // last message
-		unset($messages);
-
-		$subject = sprintf("[Ticket Watcher #%s]: %s\r\n",
-				$ticket->mask,
-				$ticket->subject
-        );
-        
-		$url_writer = DevblocksPlatform::getUrlService();
-        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
-
-        $body = "## " . $url;
-        $body .= "\r\n" . $message->getContent();
-
-		CerberusMail::quickSend(
-			$to,
-			$subject,
-			$body
-		);
-		*/		
 	}
     
 	private function _workerWatchedTask($event) {
@@ -131,8 +109,10 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$worker_id = $event->params['worker_id'];
 		$context = $event->params['context'];
 		$task_id = $event->params['context_id'];
+        
+        Context_Task::getContext($task_id, $token_labels, $values);
 		
-        $task = DAO_Task::get($task_id);
+        //$task = DAO_Task::get($task_id);
         
 		// Sanitize and combine all the destination addresses
 		$next_worker = DAO_Worker::get($worker_id);
@@ -140,7 +120,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			
 		if(empty($to))
 			return;
-			
+        
+        echo "values = ";
+        print_r($values);
+        
+        /*
 		$subject = sprintf("[Task Watcher #%d]: %s",
             $task->id,
 			$task->title
@@ -160,7 +144,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			$to,
 			$subject,
 			$body
-		);				
+		);
+        */
 	}
     
 	private function _workerOwned($event) {
