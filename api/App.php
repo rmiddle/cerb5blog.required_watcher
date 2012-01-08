@@ -159,7 +159,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         
                     if ( (!empty($owner['to'])) && ($owner['to'] !== 0) ) {
       					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
-       					@$target_worker = DAO_Worker::get($owner_id);
                         @$ticket_id = $model[DAO_Ticket::ID];
 
                         $ticket = DAO_Ticket::get($ticket_id);
@@ -171,7 +170,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         $default_personal = $address->reply_personal;
 
                         // Sanitize and combine all the destination addresses
-                        $next_worker = DAO_Worker::get($worker_id);
+                        $next_worker = DAO_Worker::get($owner_id);
                         $to = $next_worker->email;
                             
                         if(empty($to))
