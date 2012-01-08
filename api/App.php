@@ -172,15 +172,15 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             return;
         
                         $param = array(
-							'action' => relay_email,
+							'action' => 'relay_email',
 							'to' => array( '0' => $to ),
-							'subject' => "{{ticket_subject}}",
+							'subject' => "{{subject}}",
 							'content' => 
-"## Relayed from {{ticket_url}}
+"## Relayed from {{url}}
 ## Your reply to this message will be broadcast to the requesters. 
 ## Instructions: http://wiki.cerb5.com/wiki/Email_Relay
 ##
-{{content}}
+{{initial_message_content}}
 ",
 							'include_attachments' => 1,
 						);
