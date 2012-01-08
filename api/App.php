@@ -158,12 +158,13 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
       					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
                         @$ticket_id = $model[DAO_Ticket::ID];
 
-                        $ticket = DAO_Ticket::get($ticket_id);
-                        Context_Ticket::getContext($ticket, $token_labels, $token_values);
+                        Context_Ticket::getContext($ticket_id, $token_labels, $token_values);
                         echo "token_labels = ";
                         print_r($token_labels);
                         echo "token_values = ";
                         print_r($token_values);
+                        $ticket = DAO_Ticket::get($ticket_id);
+                        
                         $address = DAO_AddressOutgoing::getDefault();
                         $default_from = $address->email;
                         $default_personal = $address->reply_personal;
