@@ -61,7 +61,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$context = $event->params['context'];
 		$ticket_id = $event->params['context_id'];
 
-        $ticket = DAO_Ticket::get($ticket_id);
+        Context_Ticket::getContext($ticket_id, $token_labels, $values);
         
         $address = DAO_AddressOutgoing::getDefault();
         $default_from = $address->email;
@@ -74,6 +74,33 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         if(empty($to))
             return;
         
+        $params = array(
+            'action' => 'relay_email',
+			'to' => array( '0' => $to ),
+			'subject' => "[Ticket Watcher #{{mask}}]: {{subject}}",
+			'content' => 
+"## Relayed from {{url}}
+## Your reply to this message will be broadcast to the requesters. 
+## Instructions: http://wiki.cerb5.com/wiki/Email_Relay
+##
+{{initial_message_content}}
+",
+			'include_attachments' => 1,
+        );
+        DevblocksEventHelper::runActionRelayEmail(
+            $params,
+            $values,
+            CerberusContexts::CONTEXT_TICKET,
+            $ticket_id,
+            $values['group_id'],
+            @$values['bucket_id'] or 0,
+            $values['initial_message_id'],
+            @$values['owner_id'] or 0,
+            $values['initial_message_sender_address'],
+            $values['initial_message_sender_full_name'],
+            $values['subject']
+        );
+        /*
         $messages = DAO_Message::getMessagesByTicket($ticket_id);			
 		$message = end($messages); // last message
 		unset($messages);
@@ -93,7 +120,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			$to,
 			$subject,
 			$body
-		);				
+		);
+		*/		
 	}
     
 	private function _workerWatchedTask($event) {
@@ -197,30 +225,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             $values['initial_message_sender_full_name'],
                             $values['subject']
                         );
-                        /*
-                        $ticket = DAO_Ticket::get($ticket_id);
-
-                        $messages = DAO_Message::getMessagesByTicket($ticket_id);			
-                        $message = end($messages); // last message
-                        unset($messages);
-
-                        $subject = sprintf("[Ticket Owner #%s]: %s\r\n",
-                            $ticket->mask,
-                            $ticket->subject
-                        );
-        
-                        $url_writer = DevblocksPlatform::getUrlService();
-                        $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
-
-                        $body = "## " . $url;
-                        $body .= "\r\n" . $message->getContent();
-
-                        CerberusMail::quickSend(
-                            $to,
-                            $subject,
-                            $body
-                        );
-                        */
                     }
                 }
             }
