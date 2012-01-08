@@ -171,7 +171,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         if(empty($to))
                             return;
         
-                        $param = array(
+                        $params = array(
 							'action' => 'relay_email',
 							'to' => array( '0' => $to ),
 							'subject' => "{{subject}}",
