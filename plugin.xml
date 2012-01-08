@@ -4,16 +4,52 @@
 	<name>[Cerb5blog] Required Watchers</name>
 	<description>Send Email Notifications / Watchers to ticket owners on update and assigement.  Users can not change or turn off said notifications.</description>
 	<author>Robert Middleswarth</author>
-	<revision>0</revision>
+	<version>1.0.0</version>
 	<link>http://cerb5blog.com</link>
 	<image>plugin.png</image>
  
+	<!-- Requirements -->
+	
+	<requires>
+		<app_version min="5.6" max="5.7.99" />
+	</requires>
+	
 	<!-- Plugin Dependencies -->
 	
 	<dependencies>
-		<require plugin_id="cerberusweb.core" version="5.0.0-rc1" />
+		<require plugin_id="cerberusweb.core" version="5.6.0" />
 	</dependencies>
+
+	<!-- Patches -->
 	
+	<patches>
+		<!--
+		<patch version="5.3.0" revision="1" file="patches/5.3.0.php" />
+		-->
+	</patches>
+	
+	<!-- Exported Classes -->
+	
+	<class_loader>
+		<!--
+		<file path="api/dao/example.php">
+			<class name="DAO_Example" />
+			<class name="Model_Example" />
+			<class name="Plugin_Example" />
+			<class name="SearchFields_Example" />
+			<class name="View_Example" />
+		</file>
+		-->
+	</class_loader>
+
+	<!-- Templates -->
+	
+	<!--
+	<templates set="example.template.namespace">
+		<template path="path/to/template.tpl" />
+	</templates>
+	-->	
+
 	<!-- Event Points -->
 
 	<event_points>
@@ -41,6 +77,7 @@
 				<param key="events">
 					<value>
 						<data key="context_link.set" />
+						<data key="dao.ticket.update" />
 						<data key="cerb5blog.context_link.watcher" />
 					</value>
 				</param>
