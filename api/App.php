@@ -12,8 +12,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			case 'context_link.set':
 				$this->_handleContextLink($event);
 				break;
+			case 'dao.ticket.update':
+				$this->_workerOwned($event);
+				break;
 			case 'cerb5blog.context_link.watcher':
-				$this->_workerAssigned($event);
+				$this->_workerWatched($event);
 				break;
 		}
 	}
@@ -37,20 +40,20 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		}
 	}
     
-	private function _workerAssigned($event) {
+	private function _workerWatched($event) {
 		$context = $event->params['context'];
  		
         switch($context) {
             case CerberusContexts::CONTEXT_TICKET:
-                $this->_workerAssignedTicket($event);
+                $this->_workerWatchedTicket($event);
                 break;
             case CerberusContexts::CONTEXT_TASK:
-                $this->_workerAssignedTask($event);
+                $this->_workerWatchedTask($event);
                 break;
     	}	
     }
 
-	private function _workerAssignedTicket($event) {
+	private function _workerWatchedTicket($event) {
 		$translate = DevblocksPlatform::getTranslationService();
 		$events = DevblocksPlatform::getEventService();
 
@@ -71,12 +74,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         if(empty($to))
             return;
         
-        $ticket = DAO_Ticket::get($ticket_id);
         $messages = DAO_Message::getMessagesByTicket($ticket_id);			
 		$message = end($messages); // last message
 		unset($messages);
 
-		$subject = sprintf("[Ticket Assignment #%s]: %s\r\n",
+		$subject = sprintf("[Ticket Watcher #%s]: %s\r\n",
 				$ticket->mask,
 				$ticket->subject
         );
@@ -94,7 +96,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		);				
 	}
     
-	private function _workerAssignedTask($event) {
+	private function _workerWatchedTask($event) {
 		$translate = DevblocksPlatform::getTranslationService();
 		$events = DevblocksPlatform::getEventService();
 
@@ -111,16 +113,11 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		if(empty($to))
 			return;
 			
-		$subject = sprintf("[Task Assignment #%d]: %s",
+		$subject = sprintf("[Task Watcher #%d]: %s",
             $task->id,
 			$task->title
         );
 				
-        $body = sprintf("[Task Assignment #%d]: %s",
-			$task->id,
-			$task->title
-		);
-            
  		$url_writer = DevblocksPlatform::getUrlService();
         $url = $url_writer->write(sprintf("c=tasks&tab=display&id=%d", $task_id), true);
 
@@ -136,6 +133,68 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			$subject,
 			$body
 		);				
+	}
+    
+	private function _workerOwned($event) {
+		$translate = DevblocksPlatform::getTranslationService();
+		$events = DevblocksPlatform::getEventService();
+
+        $objects = $event->params['objects'];
+           	if(is_array($objects))
+                foreach($objects as $object_id => $object) {
+                    @$model = $object['model'];
+                    @$changes = $object['changes'];
+
+                    if(empty($model) || empty($changes))
+                        continue;
+
+                    /*
+                     * Owner changed
+                     */
+                    if(isset($changes[DAO_Ticket::OWNER_ID])) {
+                        @$owner_id = $changes[DAO_Ticket::OWNER_ID];
+                        @
+                        
+                        if(!empty($owner_id['to'])) {
+           					@$target_worker = DAO_Worker::get($changes[DAO_Ticket::OWNER_ID]['to']);
+                            @$ticket_id = $model[DAO_Ticket::ID];
+
+                            $ticket = DAO_Ticket::get($ticket_id);
+        
+                            $address = DAO_AddressOutgoing::getDefault();
+                            $default_from = $address->email;
+                            $default_personal = $address->reply_personal;
+
+                            // Sanitize and combine all the destination addresses
+                            $next_worker = DAO_Worker::get($worker_id);
+                            $to = $next_worker->email;
+                            
+                            if(empty($to))
+                                return;
+        
+                            $messages = DAO_Message::getMessagesByTicket($ticket_id);			
+                            $message = end($messages); // last message
+                            unset($messages);
+
+                            $subject = sprintf("[Ticket Owner #%s]: %s\r\n",
+                                $ticket->mask,
+                                $ticket->subject
+                            );
+        
+                            $url_writer = DevblocksPlatform::getUrlService();
+                            $url = $url_writer->write(sprintf("c=display&mask=%s", $ticket->mask), true);
+
+                            $body = "## " . $url;
+                            $body .= "\r\n" . $message->getContent();
+
+                            CerberusMail::quickSend(
+                                $to,
+                                $subject,
+                                $body
+                            );				
+                        }
+                    }
+                }
 	}
 };
 
