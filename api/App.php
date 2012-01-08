@@ -132,8 +132,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
         $body .= "\r\nLast Update:  " . date("F j, Y, g:i a T", intval($task->updated_date));
         $body .= "\r\nDue Date: " . date("F j, Y, g:i a T", intval($task->due_date));
         $body .= "\r\nIs Completed: ";
-        $body .= $task->is_completed ? "Open" : "Closed";
-        if ($task->is_completed) {
+        $body .= $task->is_completed ? "Closed" : "Open";
+        if (!$task->is_completed) {
             $body .= "\r\nCompleted Date: " . date("F j, Y, g:i a T", intval($task->completed_date));
         }
 
