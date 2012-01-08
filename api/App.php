@@ -159,7 +159,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         @$ticket_id = $model[DAO_Ticket::ID];
 
                         $ticket = DAO_Ticket::get($ticket_id);
-                        DAO_Ticket::getContext($ticket, $token_labels, $token_values);
+                        Context_Ticket::getContext($ticket, $token_labels, $token_values);
                         echo "token_labels = ";
                         print_r($token_labels);
                         echo "token_values = ";
