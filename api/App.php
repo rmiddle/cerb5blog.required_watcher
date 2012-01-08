@@ -159,11 +159,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         @$ticket_id = $model[DAO_Ticket::ID];
 
                         Context_Ticket::getContext($ticket_id, $token_labels, $token_values);
-                        echo "token_labels = ";
-                        print_r($token_labels);
-                        echo "token_values = ";
-                        print_r($token_values);
-                        
                         
                         $address = DAO_AddressOutgoing::getDefault();
                         $default_from = $address->email;
@@ -190,11 +185,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 							'include_attachments' => 1,
 						);
                         $token = "relay_email";
-                        echo "token = ";
-                        print_r($token);
-                        echo "param = ";
-                        print_r($param);
-
+                        
                         Event_MailReceivedByWatcher::runActionExtension($token, array(), $param,$token_values);
                         /*
                         $ticket = DAO_Ticket::get($ticket_id);
