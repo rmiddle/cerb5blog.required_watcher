@@ -176,7 +176,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         if(empty($to))
                             return;
         
-                        $token = array(
+                        $param = array(
 							'action' => relay_email,
 							'to' => array( '0' => $to ),
 							'subject' => "{{ticket_subject}}",
@@ -189,10 +189,13 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 ",
 							'include_attachments' => 1,
 						);
+                        $token = "relay_email";
                         echo "token = ";
                         print_r($token);
+                        echo "param = ";
+                        print_r($param);
 
-                        Event_MailReceivedByWatcher::runActionExtension($token, array(), $token_labels,$token_values);
+                        Event_MailReceivedByWatcher::runActionExtension($token, array(), $param,$token_values);
                         /*
                         $ticket = DAO_Ticket::get($ticket_id);
 
