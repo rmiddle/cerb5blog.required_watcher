@@ -157,7 +157,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                     if(isset($changes[DAO_Ticket::OWNER_ID])) {
                         @$owner = $changes[DAO_Ticket::OWNER_ID];
                         echo "Owner = ";
-                        print_r($ownerd);
+                        print_r($owner);
                         
                         if((!empty($owner['to']) && ($owner['to'] !==0)) {
            					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
