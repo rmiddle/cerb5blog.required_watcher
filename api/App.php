@@ -197,7 +197,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             $values['initial_message_sender_full_name'],
                             $values['subject']
                         );
-                        //AbstractEvent_Ticket::runActionExtension($token, array(), $param,$token_values);
                         /*
                         $ticket = DAO_Ticket::get($ticket_id);
 
