@@ -161,7 +161,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                             echo "Owner_id = " . 
                             print_r($owner_id);
                             echo "Ticket_id = ";
-                            print_r($ticket_id)
+                            print_r($ticket_id);
 
                             $ticket = DAO_Ticket::get($ticket_id);
         
