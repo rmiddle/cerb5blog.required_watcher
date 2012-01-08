@@ -158,7 +158,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
       					@$owner_id = $changes[DAO_Ticket::OWNER_ID]['to'];
                         @$ticket_id = $model[DAO_Ticket::ID];
 
-                        Context_Ticket::getContext($ticket_id, $token_labels, $token_values);
+                        Context_Ticket::getContext($ticket_id, $token_labels, $values);
                         
                         $address = DAO_AddressOutgoing::getDefault();
                         $default_from = $address->email;
@@ -184,9 +184,20 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 ",
 							'include_attachments' => 1,
 						);
-                        $token = 'relay_email';
-print_r($token_values);                        
-                        AbstractEvent_Ticket::runActionExtension($token, array(), $param,$token_values);
+                        DevblocksEventHelper::runActionRelayEmail(
+                            $params,
+                            $values,
+                            CerberusContexts::CONTEXT_TICKET,
+                            $ticket_id,
+                            $values['group_id'],
+                            @$values['bucket_id'] or 0,
+                            $values['initial_message_id'],
+                            @$values['owner_id'] or 0,
+                            $values['initial_message_sender_address'],
+                            $values['initial_message_sender_full_name'],
+                            $values['subject']
+                        );
+                        //AbstractEvent_Ticket::runActionExtension($token, array(), $param,$token_values);
                         /*
                         $ticket = DAO_Ticket::get($ticket_id);
 
