@@ -174,7 +174,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                         $params = array(
 							'action' => 'relay_email',
 							'to' => array( '0' => $to ),
-							'subject' => "{{subject}}",
+							'subject' => "[Ticket Owner #{{mask}}]: {{subject}}",
 							'content' => 
 "## Relayed from {{url}}
 ## Your reply to this message will be broadcast to the requesters. 
