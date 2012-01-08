@@ -186,7 +186,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 						);
                         $token = "relay_email";
                         
-                        Event_MailReceivedByWatcher::runActionExtension($token, array(), $param,$token_values);
+                        AbstractEvent_Ticket::runActionExtension($token, array(), $param,$token_values);
                         /*
                         $ticket = DAO_Ticket::get($ticket_id);
 
