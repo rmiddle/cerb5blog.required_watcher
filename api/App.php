@@ -147,6 +147,8 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
                     
                 echo "changes = ";
                 print_r($changes);
+                echo "model = ";
+                print_r($model);
 
                 if(empty($model) || empty($changes))
                     continue;
