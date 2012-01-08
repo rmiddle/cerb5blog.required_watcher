@@ -184,7 +184,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 ",
 							'include_attachments' => 1,
 						);
-                        $token = "relay_email";
+                        $token = 'relay_email':
                         
                         AbstractEvent_Ticket::runActionExtension($token, array(), $param,$token_values);
                         /*
