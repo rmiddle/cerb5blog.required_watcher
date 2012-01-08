@@ -121,8 +121,10 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		if(empty($to))
 			return;
         
+        echo "<pre>";
         echo "values = ";
         print_r($values);
+        echo "</pre>";
         
         /*
 		$subject = sprintf("[Task Watcher #%d]: %s",
