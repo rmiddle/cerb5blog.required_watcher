@@ -110,9 +110,7 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		$context = $event->params['context'];
 		$task_id = $event->params['context_id'];
         
-        Context_Task::getContext($task_id, $token_labels, $values);
-		
-        //$task = DAO_Task::get($task_id);
+        $task = DAO_Task::get($task_id);
         
 		// Sanitize and combine all the destination addresses
 		$next_worker = DAO_Worker::get($worker_id);
@@ -121,12 +119,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 		if(empty($to))
 			return;
         
-        echo "<pre>";
-        echo "values = ";
-        print_r($values);
-        echo "</pre>";
-        
-        /*
 		$subject = sprintf("[Task Watcher #%d]: %s",
             $task->id,
 			$task->title
@@ -147,7 +139,6 @@ class Cerb5blogRequiredWatchersEventListener extends DevblocksEventListenerExten
 			$subject,
 			$body
 		);
-        */
 	}
     
 	private function _workerOwned($event) {
