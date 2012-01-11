@@ -4,7 +4,7 @@
 	<name>[Cerb5blog] Required Watchers</name>
 	<description>Send Email Notifications / Watchers to ticket owners on update and assigement.  Users can not change or turn off said notifications.</description>
 	<author>Robert Middleswarth</author>
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 	<link>http://cerb5blog.com</link>
 	<image>plugin.png</image>
  
